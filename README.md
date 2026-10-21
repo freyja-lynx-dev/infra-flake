@@ -37,3 +37,22 @@ nix fmt
 nix flake check
 nix build .#nixosConfigurations.frank.config.system.build.toplevel
 ```
+
+## Validating the Router in a VM Lab
+
+Run the automated 3-node QEMU/KVM integration test (`isp` <-> `frank` <-> `client`) defined in [`nix/router-test.nix`](nix/router-test.nix):
+
+```sh
+nix build -L .#router-test
+# or via just:
+just test-router
+```
+
+To drop into an interactive test driver with all three VMs (`isp`, `frank`, `client`) for manual experimentation:
+
+```sh
+just test-router-interactive
+# Inside the driver REPL:
+# >>> start_all()
+# >>> frank.succeed("nft list ruleset")
+```

@@ -14,5 +14,16 @@ _: {
         upnp = true;
         inherit (cfg.upnp) natpmp;
       };
+
+      systemd.services.miniupnpd = {
+        after = [
+          "network-online.target"
+          "nftables.service"
+        ];
+        wants = [
+          "network-online.target"
+          "nftables.service"
+        ];
+      };
     };
 }

@@ -31,6 +31,16 @@ check:
 build host="frank":
     nix build .#nixosConfigurations.{{ host }}.config.system.build.toplevel
 
+# Run the 3-VM router integration test (isp <-> frank <-> client)
+[group('nixos')]
+test-router:
+    nix build -L .#router-test
+
+# Launch an interactive Python/QEMU session with the 3-VM router test lab
+[group('nixos')]
+test-router-interactive:
+    nix run .#router-test.driverInteractive
+
 ############################################################################
 #
 #  Secrets (sops + age)

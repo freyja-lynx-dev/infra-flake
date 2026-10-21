@@ -1,3 +1,7 @@
-{sharedPackageSets, ...}: {
-  flake.nixosModules.frank.nixpkgs.pkgs = sharedPackageSets.x86_64-linux;
+{
+  lib,
+  sharedPackageSets,
+  ...
+}: {
+  flake.nixosModules.frank.nixpkgs.pkgs = lib.mkDefault sharedPackageSets.x86_64-linux;
 }

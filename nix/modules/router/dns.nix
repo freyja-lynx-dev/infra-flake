@@ -71,6 +71,7 @@ _: {
               cfg.lan.ipv4.address
             ];
             port = 53;
+            hostsfile_enabled = false;
             upstream_dns =
               if cfg.dns.unbound.enable
               then [unboundAddr]
@@ -79,8 +80,18 @@ _: {
               if cfg.dns.unbound.enable
               then [unboundAddr]
               else ["1.1.1.1" "9.9.9.9"];
+            local_ptr_upstreams = lib.optionals cfg.dns.unbound.enable [unboundAddr];
           };
         };
+      };
+
+      systemd.services.adguardhome = lib.mkIf cfg.dns.adguardhome.enable {
+        after =
+          ["network-online.target"]
+          ++ lib.optionals cfg.dns.unbound.enable ["unbound.service"];
+        wants =
+          ["network-online.target"]
+          ++ lib.optionals cfg.dns.unbound.enable ["unbound.service"];
       };
 
       networking.nameservers = ["127.0.0.1"];

@@ -35,6 +35,10 @@ _: {
         # Enable TCP SYN cookies
         "net.ipv4.tcp_syncookies" = 1;
 
+        # Allow services (sshd, AdGuard Home, etc.) to bind to LAN IP before link carrier is up
+        "net.ipv4.ip_nonlocal_bind" = 1;
+        "net.ipv6.ip_nonlocal_bind" = 1;
+
         # Loose reverse path filtering on router interfaces
         "net.ipv4.conf.all.rp_filter" = 1;
         "net.ipv4.conf.default.rp_filter" = 1;
