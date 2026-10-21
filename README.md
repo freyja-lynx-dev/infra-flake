@@ -56,3 +56,20 @@ just test-router-interactive
 # >>> start_all()
 # >>> frank.succeed("nft list ruleset")
 ```
+
+## Live-Testing `frank` on Hardware from a USB Drive
+
+You can build a self-contained, bootable GPT/UEFI raw disk image ([`nix/hosts/nixos/frank/usb-image.nix`](nix/hosts/nixos/frank/usb-image.nix)) to test `frank` on the router hardware without touching the internal OPNsense SSD (`wwn-0x5002538e40307989`) or motherboard EFI NVRAM:
+
+```sh
+just build-usb
+# Produces: ./result/frank-router-usb.img
+```
+
+Flash it to a USB stick (replace `/dev/sdX` with your target USB block device):
+
+```sh
+sudo dd if=./result/frank-router-usb.img of=/dev/sdX bs=4M status=progress oflag=sync
+```
+
+On first boot, the `nixos` root partition automatically grows to fill the USB stick (`boot.growPartition` + `x-systemd.growfs`), brings up WAN (`enp9s0`) and LAN (`192.168.1.1/24` on `enp3s0`), starts Kea DHCPv4, AdGuard Home (`http://192.168.1.1:3000`), Unbound, and MiniUPnPd, and allows SSH access (`ssh root@192.168.1.1`). To revert to OPNsense at any time, simply power off, unplug the USB stick, and turn the router back on.

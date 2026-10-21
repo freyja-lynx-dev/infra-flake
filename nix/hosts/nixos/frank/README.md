@@ -22,3 +22,11 @@ NixOS edge router replacing `LynxRouter.lynxdomain` (OPNsense).
 - **WAN (`enp9s0`)**: Broadcom NetXtreme BCM57762 Gigabit Ethernet PCIe (`bge1@pci0:9:0:0` -> `pci-0000:09:00.0`)
 - **LAN (`enp3s0`)**: Broadcom NetXtreme BCM57766 Gigabit Ethernet PCIe (`bge0@pci0:3:0:0` -> `pci-0000:03:00.0`)
 - **Storage**: SATA SSD (`/dev/disk/by-id/wwn-0x5002538e40307989`)
+
+## Bootable USB Image (`frank-usb`)
+
+[`usb-image.nix`](usb-image.nix) defines `packages.x86_64-linux.frank-usb` (`nixosConfigurations.frank.config.system.build.images.usb`), a self-contained GPT/UEFI raw disk image for testing `frank` on real hardware before wiping the internal OPNsense SSD:
+
+- Overrides `disko.devices` so only `/dev/disk/by-label/nixos` (`ext4`, auto-resizing) and `/dev/disk/by-label/ESP` (`vfat`) are mounted.
+- Sets `boot.loader.efi.canTouchEfiVariables = false` so `systemd-boot` installs to `/EFI/BOOT/BOOTX64.EFI` without altering Mac NVRAM boot variables.
+- Enables `services.getty.autologinUser = "root"` on the physical console (`tty1`) and pre-authorizes `root@192.168.1.1` SSH key login.

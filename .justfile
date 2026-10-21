@@ -31,6 +31,11 @@ check:
 build host="frank":
     nix build .#nixosConfigurations.{{ host }}.config.system.build.toplevel
 
+# Build the ready-to-flash bootable GPT/UEFI USB image for frank
+[group('nixos')]
+build-usb:
+    nix build -L .#frank-usb
+
 # Run the 3-VM router integration test (isp <-> frank <-> client)
 [group('nixos')]
 test-router:
