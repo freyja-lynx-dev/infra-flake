@@ -30,6 +30,13 @@
           description = "Optional MAC address to bind and rename the WAN interface.";
         };
 
+        pciPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "pci-0000:09:00.0";
+          description = "Optional systemd ID_PATH (e.g. pci-0000:09:00.0) to match and pin the WAN interface name.";
+        };
+
         disableOffloading = lib.mkOption {
           type = lib.types.bool;
           default = true;
@@ -69,6 +76,13 @@
           default = null;
           example = "00:10:18:xx:xx:xy";
           description = "Optional MAC address to bind and rename the LAN interface.";
+        };
+
+        pciPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "pci-0000:03:00.0";
+          description = "Optional systemd ID_PATH (e.g. pci-0000:03:00.0) to match and pin the LAN interface name.";
         };
 
         disableOffloading = lib.mkOption {

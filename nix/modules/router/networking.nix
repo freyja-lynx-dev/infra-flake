@@ -43,28 +43,32 @@ _: {
 
         links = {
           "10-wan" =
-            lib.mkIf (cfg.wan.macAddress != null || cfg.wan.disableOffloading)
+            lib.mkIf (cfg.wan.macAddress != null || cfg.wan.pciPath != null || cfg.wan.disableOffloading)
             {
               matchConfig =
                 if cfg.wan.macAddress != null
                 then {MACAddress = cfg.wan.macAddress;}
+                else if cfg.wan.pciPath != null
+                then {Path = cfg.wan.pciPath;}
                 else {OriginalName = cfg.wan.interface;};
               linkConfig =
-                (lib.optionalAttrs (cfg.wan.macAddress != null) {
+                (lib.optionalAttrs (cfg.wan.macAddress != null || cfg.wan.pciPath != null) {
                   Name = cfg.wan.interface;
                 })
                 // (lib.optionalAttrs cfg.wan.disableOffloading offloadLinkConfig);
             };
 
           "20-lan" =
-            lib.mkIf (cfg.lan.macAddress != null || cfg.lan.disableOffloading)
+            lib.mkIf (cfg.lan.macAddress != null || cfg.lan.pciPath != null || cfg.lan.disableOffloading)
             {
               matchConfig =
                 if cfg.lan.macAddress != null
                 then {MACAddress = cfg.lan.macAddress;}
+                else if cfg.lan.pciPath != null
+                then {Path = cfg.lan.pciPath;}
                 else {OriginalName = cfg.lan.interface;};
               linkConfig =
-                (lib.optionalAttrs (cfg.lan.macAddress != null) {
+                (lib.optionalAttrs (cfg.lan.macAddress != null || cfg.lan.pciPath != null) {
                   Name = cfg.lan.interface;
                 })
                 // (lib.optionalAttrs cfg.lan.disableOffloading offloadLinkConfig);

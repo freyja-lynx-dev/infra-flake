@@ -1,8 +1,7 @@
 _: {
   flake.nixosModules.frank = {
     disko.devices.disk.main = {
-      # Update to match the target router disk (e.g. /dev/disk/by-id/...)
-      device = "/dev/sda";
+      device = "/dev/disk/by-id/wwn-0x5002538e40307989";
       type = "disk";
 
       content = {

@@ -4,10 +4,12 @@ _: {
       enable = true;
       domain = "lynxdomain";
 
-      # Update to match the Linux predictable interface names for your NICs
-      # (e.g. eno1/eno2 or enp2s0f0/enp2s0f1; see README for the OPNsense command to check).
+      # Mapped from OPNsense pciconf:
+      # - WAN (was bge1@pci0:9:0:0, BCM57762) -> enp9s0 (pci-0000:09:00.0)
+      # - LAN (was bge0@pci0:3:0:0, BCM57766) -> enp3s0 (pci-0000:03:00.0)
       wan = {
-        interface = "eno2";
+        interface = "enp9s0";
+        pciPath = "pci-0000:09:00.0";
         macAddress = null;
         disableOffloading = true;
         blockPriv = true;
@@ -15,7 +17,8 @@ _: {
       };
 
       lan = {
-        interface = "eno1";
+        interface = "enp3s0";
+        pciPath = "pci-0000:03:00.0";
         macAddress = null;
         disableOffloading = true;
 
