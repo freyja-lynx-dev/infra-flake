@@ -4,12 +4,10 @@ _: {
       enable = true;
       domain = "lynxdomain";
 
-      # In OPNsense (FreeBSD), Broadcom NetXtreme interfaces were named bge1 (WAN)
-      # and bge0 (LAN). On Linux (tg3 driver), update `interface` to the kernel's
-      # predicted names (e.g., "eno2" / "eno1") or set `macAddress` to bind and
-      # automatically rename them to "bge1" and "bge0".
+      # Update to match the Linux predictable interface names for your NICs
+      # (e.g. eno1/eno2 or enp2s0f0/enp2s0f1; see README for the OPNsense command to check).
       wan = {
-        interface = "bge1";
+        interface = "eno2";
         macAddress = null;
         disableOffloading = true;
         blockPriv = true;
@@ -17,7 +15,7 @@ _: {
       };
 
       lan = {
-        interface = "bge0";
+        interface = "eno1";
         macAddress = null;
         disableOffloading = true;
 

@@ -19,9 +19,16 @@ NixOS edge router replacing `LynxRouter.lynxdomain` (OPNsense).
 
 ## Hardware Notes
 
-In FreeBSD/OPNsense, the Broadcom NetXtreme Gigabit Ethernet NICs were named `bge1` (WAN) and `bge0` (LAN). On Linux (`tg3` driver), either:
+In FreeBSD/OPNsense, the Broadcom NetXtreme Gigabit Ethernet NICs were named `bge1` (WAN) and `bge0` (LAN). [`router.nix`](./router.nix) defaults to Linux predictable interface names `eno2` (WAN) and `eno1` (LAN).
 
-1. Set `router.wan.macAddress` and `router.lan.macAddress` in [`router.nix`](./router.nix) so `systemd-udevd` automatically renames them to `bge1` and `bge0`, or
-2. Update `router.wan.interface` and `router.lan.interface` in [`router.nix`](./router.nix) to match Linux's interface names (e.g. `eno2` and `eno1`).
+To verify the exact `/dev/disk/by-id/...` path and PCI interface addresses from an OPNsense shell before installing:
+
+```sh
+# 1. Show disk model (descr) and serial (ident) for /dev/disk/by-id/
+geom disk list
+
+# 2. Show PCI bus/slot/function for bge0 and bge1 (e.g. pci0:2:0:0 -> enp2s0f0)
+pciconf -lv | grep -A4 '^bge'
+```
 
 Before running Disko on the target hardware, verify `disko.devices.disk.main.device` in [`disko.nix`](./disko.nix).
