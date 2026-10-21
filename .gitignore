@@ -1,0 +1,8 @@
+# Local environment & build outputs
+.direnv/
+result
+result-*
+
+# Do not commit the reference OPNsense XML backup
+config-LynxRouter*.xml
+*.xml
