@@ -38,8 +38,7 @@ _: {
                 10.0.0.0/8,
                 172.16.0.0/12,
                 192.168.0.0/16,
-                169.254.0.0/16,
-                100.64.0.0/10
+                169.254.0.0/16
               }
             }
 
@@ -82,6 +81,16 @@ _: {
             ''}
             }
 
+            chain mangle_postrouting {
+              type filter hook postrouting priority mangle; policy accept;
+
+              # Broadcom tg3 TX firmware hangs on packets tagged with DSCP EF (0xb8,
+              # used by OpenSSH interactive sessions). Clear DSCP EF to CS0 before
+              # handing packets to the NIC driver.
+              ip dscp ef ip dscp set cs0 comment "Work around Broadcom tg3 TX hang on DSCP EF"
+              ip6 dscp ef ip6 dscp set cs0 comment "Work around Broadcom tg3 TX hang on DSCP EF"
+            }
+
             chain postrouting {
               type nat hook postrouting priority srcnat; policy accept;
 
@@ -103,7 +112,8 @@ _: {
               iifname "${cfg.wan.interface}" ip6 saddr @bogons_v6 drop comment "Block IPv6 bogons from WAN"
             ''}
 
-              # Allow essential DHCPv6 client & ICMPv6 on WAN for prefix delegation
+              # Allow essential DHCPv4 & DHCPv6 client & ICMPv6 on WAN
+              iifname "${cfg.wan.interface}" udp sport 67 udp dport 68 accept comment "Allow DHCPv4 client on WAN"
               iifname "${cfg.wan.interface}" ip6 saddr fe80::/10 udp dport 546 accept comment "Allow DHCPv6 client on WAN"
               iifname "${cfg.wan.interface}" icmpv6 type {
                 destination-unreachable,

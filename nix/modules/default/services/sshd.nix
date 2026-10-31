@@ -7,7 +7,7 @@
       settings = {
         KbdInteractiveAuthentication = lib.mkDefault false;
         PasswordAuthentication = lib.mkDefault false;
-        PermitRootLogin = lib.mkDefault "prohibit-password";
+        PermitRootLogin = lib.mkDefault "no";
       };
     };
   };

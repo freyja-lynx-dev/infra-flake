@@ -37,6 +37,12 @@ _: {
 
       services.resolved.enable = false;
 
+      # Ensure Thunderbolt PCIe tunnels (e.g. Apple Thunderbolt Gigabit Ethernet)
+      # are automatically authorized on boot even without a desktop session.
+      services.udev.extraRules = ''
+        ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
+      '';
+
       systemd.network = {
         enable = true;
         wait-online.anyInterface = true;
@@ -49,7 +55,10 @@ _: {
                 if cfg.wan.macAddress != null
                 then {MACAddress = cfg.wan.macAddress;}
                 else if cfg.wan.pciPath != null
-                then {Path = cfg.wan.pciPath;}
+                then {
+                  Path = "${cfg.wan.pciPath} ${cfg.wan.pciPath}-*";
+                  Type = "ether";
+                }
                 else {OriginalName = cfg.wan.interface;};
               linkConfig =
                 (lib.optionalAttrs (cfg.wan.macAddress != null || cfg.wan.pciPath != null) {
@@ -65,7 +74,10 @@ _: {
                 if cfg.lan.macAddress != null
                 then {MACAddress = cfg.lan.macAddress;}
                 else if cfg.lan.pciPath != null
-                then {Path = cfg.lan.pciPath;}
+                then {
+                  Path = "${cfg.lan.pciPath} ${cfg.lan.pciPath}-*";
+                  Type = "ether";
+                }
                 else {OriginalName = cfg.lan.interface;};
               linkConfig =
                 (lib.optionalAttrs (cfg.lan.macAddress != null || cfg.lan.pciPath != null) {

@@ -24,6 +24,21 @@ _: {
           "network-online.target"
           "nftables.service"
         ];
+        serviceConfig = {
+          NoNewPrivileges = true;
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectSystem = "strict";
+          RestrictSUIDSGID = true;
+          CapabilityBoundingSet = [
+            "CAP_NET_ADMIN"
+            "CAP_NET_BIND_SERVICE"
+            "CAP_NET_BROADCAST"
+            "CAP_NET_RAW"
+          ];
+        };
       };
     };
 }

@@ -39,10 +39,11 @@
 
         disableOffloading = lib.mkOption {
           type = lib.types.bool;
-          default = true;
+          default = false;
           description = ''
             Disable hardware checksum, TCP segmentation, and generic receive
-            offloading (matches OPNsense global interface settings).
+            offloading via systemd.network.links. Defaults to false on Linux
+            so NIC drivers (`tg3`, etc.) use native kernel offload defaults.
           '';
         };
 
@@ -87,10 +88,11 @@
 
         disableOffloading = lib.mkOption {
           type = lib.types.bool;
-          default = true;
+          default = false;
           description = ''
             Disable hardware checksum, TCP segmentation, and generic receive
-            offloading (matches OPNsense global interface settings).
+            offloading via systemd.network.links. Defaults to false on Linux
+            so NIC drivers (`tg3`, etc.) use native kernel offload defaults.
           '';
         };
 
@@ -181,8 +183,9 @@
           type = lib.types.attrsOf lib.types.str;
           default = {};
           example = {
+            desktop = "00:11:22:33:44:55";
           };
-          description = "Named MAC address aliases (migrated from OPNsense firewall aliases).";
+          description = "Named MAC address aliases for nftables sets.";
         };
       };
 

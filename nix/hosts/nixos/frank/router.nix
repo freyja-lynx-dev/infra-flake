@@ -4,14 +4,14 @@ _: {
       enable = true;
       domain = "lynxdomain";
 
-      # Mapped from OPNsense pciconf:
-      # - WAN (was bge1@pci0:9:0:0, BCM57762) -> enp9s0 (pci-0000:09:00.0)
-      # - LAN (was bge0@pci0:3:0:0, BCM57766) -> enp3s0 (pci-0000:03:00.0)
+      # Mapped from OPNsense pciconf & dmesg:
+      # - WAN (was bge1@pci0:9:0:0, Apple Thunderbolt Gigabit Ethernet BCM57762) -> enp9s0 (44:f0:9e:a8:13:88 / pci-0000:09:00.0)
+      # - LAN (was bge0@pci0:3:0:0, Mac Mini onboard BCM57766) -> enp3s0 (0c:4d:e9:c6:1b:af / pci-0000:03:00.0)
       wan = {
         interface = "enp9s0";
         pciPath = "pci-0000:09:00.0";
-        macAddress = null;
-        disableOffloading = true;
+        macAddress = "44:f0:9e:a8:13:88";
+        disableOffloading = false;
         blockPriv = true;
         blockBogons = true;
       };
@@ -19,8 +19,8 @@ _: {
       lan = {
         interface = "enp3s0";
         pciPath = "pci-0000:03:00.0";
-        macAddress = null;
-        disableOffloading = true;
+        macAddress = "0c:4d:e9:c6:1b:af";
+        disableOffloading = false;
 
         ipv4 = {
           address = "192.168.1.1";
@@ -42,9 +42,8 @@ _: {
         };
       };
 
-      # Firewall MAC aliases migrated from OPNsense <Alias><aliases>
-      aliases.mac = {
-      };
+      # Firewall MAC aliases
+      aliases.mac = {};
 
       # Outbound NAT static port rules + LAN port 53 DNS intercept to AdGuard Home
       nat = {

@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.frank = {
+  flake.nixosModules.frank = {lib, ...}: {
     disko.devices.disk.main = {
       device = "/dev/disk/by-id/wwn-0x5002538e40307989";
       type = "disk";
@@ -28,19 +28,14 @@ _: {
               type = "btrfs";
 
               subvolumes = {
-                "@" = {
-                  mountOptions = ["compress=zstd" "noatime"];
-                  mountpoint = "/";
-                };
-
-                "@home" = {
-                  mountOptions = ["compress=zstd" "noatime"];
-                  mountpoint = "/home";
-                };
-
                 "@nix" = {
                   mountOptions = ["compress=zstd" "noatime"];
                   mountpoint = "/nix";
+                };
+
+                "@persist" = {
+                  mountOptions = ["compress=zstd" "noatime"];
+                  mountpoint = "/persist";
                 };
 
                 "@var-log" = {
@@ -52,6 +47,17 @@ _: {
           };
         };
       };
+    };
+
+    # Ephemeral root on tmpfs ("erase your darlings")
+    fileSystems = {
+      "/" = lib.mkDefault {
+        device = "none";
+        fsType = "tmpfs";
+        options = ["defaults" "size=1G" "mode=755"];
+      };
+      "/persist".neededForBoot = true;
+      "/var/log".neededForBoot = true;
     };
   };
 }

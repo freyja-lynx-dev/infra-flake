@@ -81,11 +81,18 @@
           frank = {lib, ...}: {
             imports = [
               inputs.disko.nixosModules.disko
+              inputs.impermanence.nixosModules.impermanence
               inputs.sops-nix.nixosModules.sops
               self.nixosModules.default
               self.nixosModules.router
               self.nixosModules.frank
             ];
+
+            # Disable Disko/impermanence mounts inside the QEMU test VM
+            disko.devices = lib.mkForce {};
+            environment.persistence."/persist".enable = lib.mkForce false;
+            fileSystems."/persist".enable = lib.mkForce false;
+            fileSystems."/var/log".enable = lib.mkForce false;
 
             virtualisation.vlans = [
               1

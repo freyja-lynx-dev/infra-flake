@@ -8,6 +8,7 @@
 
     modules = [
       inputs.disko.nixosModules.disko
+      inputs.impermanence.nixosModules.impermanence
       inputs.sops-nix.nixosModules.sops
       self.nixosModules.default
       self.nixosModules.router
