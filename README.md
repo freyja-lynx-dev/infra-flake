@@ -72,4 +72,4 @@ Flash it to a USB stick (replace `/dev/sdX` with your target USB block device):
 sudo dd if=./result/frank-router-usb.img of=/dev/sdX bs=4M status=progress oflag=sync
 ```
 
-On boot, `frank` brings up WAN (`enp9s0`) and LAN (`192.168.1.1/24` on `enp3s0`), starts Kea DHCPv4, AdGuard Home (`http://192.168.1.1:3000`), Unbound, and MiniUPnPd, and allows SSH access (`ssh freyja@192.168.1.1`). To revert to OPNsense at any time, simply power off, unplug the USB stick, and turn the router back on.
+On boot, `frank` brings up WAN (`enp9s0`) and LAN (`192.168.1.1/24` on `enp3s0`), starts Kea DHCPv4, AdGuard Home (`http://192.168.1.1:3000`), Unbound, and MiniUPnPd, and allows SSH access (`ssh freyja@192.168.1.1`). To revert to OPNsense at any time, simply power off, unplug the USB stick, and turn the router back on. When ready to permanently replace OPNsense on the internal SSD, run `sudo install-frank-to-ssd` directly on the booted USB router.

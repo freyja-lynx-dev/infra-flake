@@ -3,8 +3,9 @@ _: {
     environment.persistence."/persist" = {
       hideMounts = true;
 
+      # Note: kea-dhcp4-server and adguardhome both use DynamicUser = true with
+      # StateDirectory, so their state lives under /var/lib/private/{kea,AdGuardHome}.
       directories = [
-        "/var/lib/kea"
         "/var/lib/nixos"
         "/var/lib/private"
         "/var/lib/systemd"

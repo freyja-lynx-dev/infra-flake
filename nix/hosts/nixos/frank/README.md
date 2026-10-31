@@ -30,3 +30,4 @@ NixOS edge router replacing `LynxRouter.lynxdomain` (OPNsense).
 - Overrides `disko.devices` so only `/dev/disk/by-label/nixos` (`ext4`) and `/dev/disk/by-label/ESP` (`vfat`, `nofail`) are mounted, with `boot.growPartition = false` so slow USB flash I/O never stalls `local-fs.target`.
 - Sets `boot.loader.efi.canTouchEfiVariables = false` so `systemd-boot` installs to `/EFI/BOOT/BOOTX64.EFI` without altering Mac NVRAM boot variables.
 - Enables `services.getty.autologinUser = "freyja"` on the physical console (`tty1`) and pre-authorizes `freyja@192.168.1.1` SSH key login (`root` login disabled).
+- Includes `sudo install-frank-to-ssd`, an offline installer command that formats the internal SATA SSD via Disko, migrates live router state (`ssh_host_*`, `machine-id`, AdGuard Home & Kea DHCP state) to `/mnt/persist`, and installs `frank` to the SSD.
